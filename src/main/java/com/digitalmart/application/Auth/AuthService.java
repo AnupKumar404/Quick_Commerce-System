@@ -1,5 +1,6 @@
 package com.digitalmart.application.Auth;
 
+import com.digitalmart.application.Exceptions.CustomAuthEntryPoint;
 import com.digitalmart.application.Utils.JwtUtil;
 import com.digitalmart.application.Utils.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
+
+import javax.security.auth.login.LoginException;
 
 @Service
 @RequiredArgsConstructor
@@ -32,10 +35,9 @@ public class AuthService {
 
 
         if(user != null) {
-            jwtUtil.generateToken(user);
-            return "You are logged in";
+            return jwtUtil.generateToken(user);
         }
 
-        throw new BadCredentialsException("");
+        return null;
     }
 }

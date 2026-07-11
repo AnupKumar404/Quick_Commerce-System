@@ -16,9 +16,7 @@ public record UserPrincipal(
         String password,
 
         String role
-) implements UserDetails
-
- {
+) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -31,7 +29,7 @@ public record UserPrincipal(
     }
 
     @Override
-    public String getUsername() {
+    public @Nullable String getUsername() {
         return email;
     }
 

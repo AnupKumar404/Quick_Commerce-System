@@ -18,7 +18,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -42,6 +42,11 @@ public class Product {
 
     @Column(name = "product_image")
     private String imageUrl;
+
+    @Column(name = "available_stock", check = @CheckConstraint(
+            constraint = "available_stock >= 0"
+    ))
+    private Integer availableStock;
 
     @Column(name = "is_available", columnDefinition = "boolean default true")
     private Boolean isAvailable = true;

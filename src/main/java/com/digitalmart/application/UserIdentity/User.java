@@ -2,15 +2,13 @@ package com.digitalmart.application.UserIdentity;
 
 import com.digitalmart.application.Address.Address;
 import com.digitalmart.application.Order.Order;
-import com.digitalmart.application.Cart.ShoppingCart;
+import com.digitalmart.application.Cart.Cart;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,6 +36,10 @@ public class User{
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
+    @Column(name = "gender", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private GenderType gender;
+
     @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
@@ -52,7 +54,7 @@ public class User{
     private Set<Address> addresses = new HashSet<>();
 
     @OneToOne(mappedBy = "user", orphanRemoval = true)
-    private ShoppingCart cart;
+    private Cart cart;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<Order> orders = new HashSet<>();

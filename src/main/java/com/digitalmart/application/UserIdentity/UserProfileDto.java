@@ -9,6 +9,7 @@ public record UserProfileDto(
         String firstname,
         String lastname,
         String email,
+        String gender,
         BigInteger phoneNumber,
         Set<AddressDto> addresses
 )

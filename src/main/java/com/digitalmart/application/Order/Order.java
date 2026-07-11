@@ -6,6 +6,7 @@ import com.digitalmart.application.Payment.Payment;
 import com.digitalmart.application.Product.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Table(name = "orders")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Order {
 
     @Id
@@ -48,7 +50,7 @@ public class Order {
     private Payment payment;
 
 
-    public void addProduct(Product product, int quantity) {
+    public void addProduct(Product product, Integer quantity) {
         OrderItem item = new OrderItem(product, quantity);
         items.add(item);
     }

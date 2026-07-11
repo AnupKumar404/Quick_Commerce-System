@@ -14,7 +14,6 @@ public class AddressService {
 
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
 
     public String addAddress(Long userId, AddressDto dto) throws BadRequestException {
 

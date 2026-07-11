@@ -7,6 +7,9 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -15,7 +18,7 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public ProductCreateDao addProduct(ProductCreateDao dao) throws BadRequestException {
+    public String addProduct(ProductCreateDao dao) throws BadRequestException {
 
         if(productRepository.existsByName(dao.name())){
             throw new BadRequestException("product already exists");
@@ -35,13 +38,12 @@ public class ProductService {
 
         productRepository.save(newProduct);
 
-        return new ProductCreateDao(
-                newProduct.getCategory().toString(),
-                newProduct.getName(),
-                newProduct.getSku(),
-                newProduct.getDescription(),
-                newProduct.getPrice(),
-                newProduct.getImageUrl()
-        );
+        return "New product added successfully";
+    }
+
+    public List<ProductDto> getProducts(){
+
+        return productRepository.getAllProducts();
+
     }
 }
