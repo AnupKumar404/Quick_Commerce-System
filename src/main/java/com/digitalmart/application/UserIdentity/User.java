@@ -53,9 +53,9 @@ public class User{
     @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Address> addresses = new HashSet<>();
 
-    @OneToOne(mappedBy = "user", orphanRemoval = true)
-    private Cart cart;
+//    @OneToOne(mappedBy = "user", orphanRemoval = true)
+//    private Cart cart;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Order> orders = new HashSet<>();
 }
