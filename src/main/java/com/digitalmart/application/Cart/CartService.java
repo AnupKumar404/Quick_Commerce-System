@@ -62,16 +62,16 @@ public class CartService {
             CartItem existingItem = existingItemOpt.get();
             int newTotalQuantity = existingItem.getQuantity() + quantityToAdd;
 
-            // Edge Case: Check if the COMBINED quantity exceeds available stock
+            // Edge Case: Check if the COMBINED quantity exceeds available availableStock
             if (newTotalQuantity > product.getAvailableStock()) {
-                throw new IllegalStateException("Not enough stock available. You requested "
+                throw new IllegalStateException("Not enough availableStock available. You requested "
                         + newTotalQuantity + " but only " + product.getAvailableStock() + " are available.");
             }
             existingItem.setQuantity(newTotalQuantity);
         } else {
-            // Edge Case: Check stock for new item
+            // Edge Case: Check availableStock for new item
             if (quantityToAdd > product.getAvailableStock()) {
-                throw new IllegalStateException("Not enough stock available.");
+                throw new IllegalStateException("Not enough availableStock available.");
             }
             cart.addItem(product, quantityToAdd);
         }
@@ -101,10 +101,10 @@ public class CartService {
             return cartRepository.save(cart);
         }
 
-        // Edge Case: Verify stock against the new absolute quantity
+        // Edge Case: Verify availableStock against the new absolute quantity
         Product product = cartItem.getProduct();
         if (newQuantity > product.getAvailableStock()) {
-            throw new IllegalStateException("Requested quantity exceeds available stock.");
+            throw new IllegalStateException("Requested quantity exceeds available availableStock.");
         }
 
         cartItem.setQuantity(newQuantity);

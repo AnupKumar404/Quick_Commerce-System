@@ -4,10 +4,11 @@ import java.math.BigDecimal;
 
 public record ProductCreateDao(
         Long id,
-        String categoryName,
+        String category,
         String name,
         String sku,
         String description,
+        Integer availableStock,
         BigDecimal price,
         String imageUrl
 ) {

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +23,7 @@ public class ProductService {
             throw new BadRequestException("product already exists");
         }
 
-        Category category = categoryRepository.findByName(dao.categoryName())
+        Category category = categoryRepository.findByName(dao.category())
                 .orElseThrow(() -> new BadRequestException("Category does not exists"));
 
         Product newProduct = Product.builder()
@@ -32,8 +31,10 @@ public class ProductService {
                 .name(dao.name())
                 .category(category)
                 .description(dao.description())
+                .availableStock(dao.availableStock())
                 .price(dao.price())
                 .imageUrl(dao.imageUrl())
+                .isAvailable(true)
                 .build();
 
         productRepository.save(newProduct);
