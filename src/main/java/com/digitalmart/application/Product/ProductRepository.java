@@ -10,4 +10,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p.id, p.name, p.description, p.price, p.imageUrl FROM Product p")
     List<ProductDto> getAllProducts();
+
+    @Query("SELECT p.id, p.name, p.availableStock, p.price FROM Product p")
+    List<AdminDao> getAllProductsForDashboard();
 }

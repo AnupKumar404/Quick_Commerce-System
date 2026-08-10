@@ -24,7 +24,12 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getProducts() throws BadRequestException {
+    public ResponseEntity<List<ProductDto>> displayProducts() throws BadRequestException {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.displayProducts());
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<List<AdminDao>> getProducts() throws BadRequestException {
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProducts());
     }
 
@@ -36,5 +41,10 @@ public class ProductController {
     ){
 
         return ResponseEntity.ok(s3Service.generatePresignedUrl(fileName, contentType));
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductDto> fetchSingleProduct(@PathVariable Long productId){
+        return ResponseEntity.ok(productService.fetchSingleProduct(productId));
     }
 }

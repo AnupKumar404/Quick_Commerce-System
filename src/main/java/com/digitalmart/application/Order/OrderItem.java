@@ -24,7 +24,7 @@ public class OrderItem {
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("productId") // Maps to OrderItemId's productId
+    @MapsId("productId") // Maps to OrderItemId's id
     @JoinColumn(name = "product_id")
     private Product product;
 

@@ -21,8 +21,7 @@ public class CartItem {
     private Cart cart;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("productId") // Maps productId from the composite key\
-    
+    @MapsId("productId") // Maps id from the composite key\
     @JoinColumn(name = "product_id")
     private Product product;
 

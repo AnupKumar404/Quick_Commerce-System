@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -42,9 +43,26 @@ public class ProductService {
         return "New product added successfully";
     }
 
-    public List<ProductDto> getProducts(){
+    public List<AdminDao> getProducts(){
 
+        return productRepository.getAllProductsForDashboard();
+
+    }
+
+    public ProductDto fetchSingleProduct(Long productId){
+        Product product = productRepository.findById(productId)
+                .orElseThrow();
+
+        return new ProductDto(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getImageUrl()
+        );
+    }
+
+    public List<ProductDto> displayProducts(){
         return productRepository.getAllProducts();
-
     }
 }

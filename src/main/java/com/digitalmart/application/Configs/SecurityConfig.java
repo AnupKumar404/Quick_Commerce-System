@@ -4,6 +4,7 @@ import com.digitalmart.application.Exceptions.CustomAuthEntryPoint;
 import com.digitalmart.application.Utils.CustomUserDetailsService;
 import com.digitalmart.application.Utils.JwtFilter;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -50,7 +51,7 @@ public class SecurityConfig{
         return http
 
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -12,9 +12,9 @@ public class CartItemId implements Serializable {
 
     public CartItemId() {}
 
-    public CartItemId(Long cartId, Long productId) {
+    public CartItemId(Long cartId, Long id) {
         this.cartId = cartId;
-        this.productId = productId;
+        this.productId = id;
     }
 
     // Must override equals and hashCode for composite keys
