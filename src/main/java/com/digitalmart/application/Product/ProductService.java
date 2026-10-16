@@ -34,6 +34,8 @@ public class ProductService {
                 .description(dao.description())
                 .availableStock(dao.availableStock())
                 .price(dao.price())
+                .unitType(UnitType.valueOf(dao.unitType()))
+                .unitValue(dao.unitValue())
                 .imageUrl(dao.imageUrl())
                 .isAvailable(true)
                 .build();
@@ -58,6 +60,8 @@ public class ProductService {
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
+                product.getUnitType(),
+                product.getUnitValue(),
                 product.getImageUrl()
         );
     }

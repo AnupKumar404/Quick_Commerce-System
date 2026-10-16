@@ -9,6 +9,8 @@ public record ProductCreateDao(
         String sku,
         String description,
         Integer availableStock,
+        String unitType,
+        BigDecimal unitValue,
         BigDecimal price,
         String imageUrl
 ) {

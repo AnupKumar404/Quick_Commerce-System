@@ -8,7 +8,7 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     boolean existsByName(String name);
 
-    @Query("SELECT p.id, p.name, p.description, p.price, p.imageUrl FROM Product p")
+    @Query("SELECT p.id, p.name, p.description, p.price, p.unitType, p.unitValue, p.imageUrl FROM Product p")
     List<ProductDto> getAllProducts();
 
     @Query("SELECT p.id, p.name, p.availableStock, p.price FROM Product p")

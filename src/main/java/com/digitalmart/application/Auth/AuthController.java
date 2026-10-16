@@ -21,18 +21,24 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest payload) {
+    public ResponseEntity<String> login(@RequestBody LoginRequest payload) throws LoginException {
 
         String result = authService.login(payload);
 
-        ResponseCookie cookie = ResponseCookie.from("access_token", result)
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(10 * 60)
-                .sameSite("Strict")
-                .build();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body("You are logged in successfully..");
+        if(result != null) {
+
+            ResponseCookie cookie = ResponseCookie.from("access_token", result)
+                    .httpOnly(true)
+                    .secure(true)
+                    .path("/")
+                    .maxAge(10 * 60)
+                    .sameSite("None")
+                    .build();
+
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+                    .body("You are logged in successfully..");
+        }
+
+        throw new LoginException("Login Failed!");
     }
 }

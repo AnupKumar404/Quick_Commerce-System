@@ -48,6 +48,13 @@ public class Product {
     ))
     private Integer availableStock;
 
+    @Column(name = "unit_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UnitType unitType;
+
+    @Column(name = "unit_value", nullable = false)
+    private BigDecimal unitValue;
+
     @Column(name = "is_available", columnDefinition = "boolean default true")
     private Boolean isAvailable = true;
 }

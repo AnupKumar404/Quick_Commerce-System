@@ -52,6 +52,8 @@ public class CartService {
                     product.getImageUrl(),
                     item.getQuantity(),
                     product.getDescription(),
+                    product.getUnitType(),
+                    product.getUnitValue(),
                     product.getPrice(),
                     product.getPrice()
             );
