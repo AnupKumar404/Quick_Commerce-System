@@ -16,35 +16,43 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${jwt.expiration-ms}")
-    private long jwtExpiration;
+    @Value("${jwt.access-expiry}")
+    private long ACCESS_TOKEN_EXPIRY;
+
+    @Value("${jwt.refresh-expiry}")
+    private long REFRESH_TOKEN_EXPIRY;
 
     private SecretKey getSigningKey(){
         return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(UserPrincipal user){
+    // Completed Refresh Token Generator
+    public String generateRefreshToken(UserPrincipal user) {
         return Jwts.builder()
                 .subject(user.getUsername())
                 .claim("user_id", user.getUserId())
-                .claim("user_role", user.getAuthorities().toString())
+                .claim("token_type", "refresh_token") // Crucial for Option C isolation
                 .header().empty().add("typ", "jwt")
                 .and()
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .expiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRY))
                 .signWith(getSigningKey())
                 .compact();
     }
 
-
-    // Validate JWT
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    // Updated Access Token Generator
+    public String generateToken(UserPrincipal user) {
+        return Jwts.builder()
+                .subject(user.getUsername())
+                .claim("user_id", user.getUserId())
+                .claim("user_role", user.getAuthorities().toString())
+                .claim("token_type", "access_token") // Added to prevent Refresh Tokens from being used as Access Tokens
+                .header().empty().add("typ", "jwt")
+                .and()
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRY))
+                .signWith(getSigningKey())
+                .compact();
     }
 
     // Extract all claims
@@ -56,7 +64,29 @@ public class JwtUtil {
                 .getPayload();
     }
 
-    public String extractEmail(String token){
+    // Validate Access Token (Use this in your JwtAuthenticationFilter)
+    public boolean validateAccessToken(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            String tokenType = claims.get("token_type", String.class);
+            return "access_token".equals(tokenType);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Validate Refresh Token (Use this in your /refresh endpoint controller)
+    public boolean validateRefreshToken(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            String tokenType = claims.get("token_type", String.class);
+            return "refresh_token".equals(tokenType);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String extractUsername(String token){
         return extractAllClaims(token).getSubject();
     }
 
@@ -64,13 +94,17 @@ public class JwtUtil {
         return extractAllClaims(token).getExpiration();
     }
 
-    // Check expiration of token
-    public boolean isTokenExpired(String token){
-        return extractExpiration(token).before(new Date());
+    public boolean checkExpiryOfToken(String token){
+        return !extractExpiration(token).before(new Date());
     }
 
-    // Validate the expiry of token
-    public boolean validateExpiry(String token){
-        return !isTokenExpired(token);
+    // Fallback basic validation
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -107,9 +107,9 @@
 		<dependency>
 			<groupId>tools.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>3.2.3</version>
 			<scope>compile</scope>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.mapstruct</groupId>

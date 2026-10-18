@@ -1,8 +1,5 @@
 package com.digitalmart.application.Utils;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -11,10 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
@@ -34,13 +31,15 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             String token = extractToken(request);
 
+            log.info("access_token {}", token);
+
             if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                if (jwtUtil.validateToken(token) && jwtUtil.validateExpiry(token)) {
+                if (jwtUtil.validateAccessToken(token) && jwtUtil.checkExpiryOfToken(token)) {
 
-                    String email = jwtUtil.extractEmail(token);
+                    String username = jwtUtil.extractUsername(token);
 
-                    UserPrincipal userDetails = (UserPrincipal) userDetailsService.loadUserByUsername(email);
+                    UserPrincipal userDetails = (UserPrincipal) userDetailsService.loadUserByUsername(username);
 
                     log.info(userDetails.role());
 
@@ -54,8 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
 
             }
-        }catch (JwtException exception){
-            log.info("JWT Validation Failed {}", exception.getMessage());
+        }catch (AuthenticationException exception){
             SecurityContextHolder.clearContext();
         }
 
